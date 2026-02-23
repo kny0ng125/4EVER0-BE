@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   redis:
     image: redis:7-alpine
@@ -5,15 +7,27 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
+    networks:
+      - moonoz-network
 
   app:
-    #build: .                                          # ← 기존: 로컬 빌드
-    image: your-dockerhub-username/myapp:latest        # ← 수정됨: Docker Hub 이미지 사용
+    build: .
     container_name: springboot-app
     ports:
-      - "5050:5050"   # server.port
+      - "5050:5050"
     env_file:
       - .env
+    environment:
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/moonoz?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL
     depends_on:
       - redis
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - moonoz-network
+
+networks:
+  moonoz-network:
+    driver: bridge

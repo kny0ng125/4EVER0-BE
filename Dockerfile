@@ -1,5 +1,4 @@
-# OpenJDK 17 Alpine 이미지 사용
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
 
 # 작업 디렉터리 설정
 WORKDIR /app

@@ -1,10 +1,8 @@
 package com.team4ever.backend.global.security;
 
-import ch.qos.logback.classic.Logger;
 import com.team4ever.backend.domain.user.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -17,7 +15,7 @@ import java.io.IOException;
 
 @Component
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
-    private static final String FRONTEND_URL = "https://4-ever-0-fe.vercel.app";
+    private static final String FRONTEND_URL = "http://localhost:5173";
 
     private final JwtTokenProvider jwtProvider;
     private final RedisService redisService;
@@ -53,7 +51,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         // 2) 신규 사용자 여부 판단
         boolean isNew;
         try {
-            userService.getUserByUserId(oauthId);;
+            userService.getUserByUserId(oauthId);
             isNew = false;
         } catch (IllegalArgumentException ex) {
             isNew = true;
